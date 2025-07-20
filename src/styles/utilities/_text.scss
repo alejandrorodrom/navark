@@ -2,6 +2,8 @@
    UTILIDADES DE TEXTO
    =========================================== */
 
+@use '../design-system/colors' as *;
+
 // Colores de texto
 .text-primary { color: $text-primary; }
 .text-secondary { color: $text-secondary; }

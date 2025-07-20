@@ -2,6 +2,9 @@
    RESET Y ESTILOS BASE
    =========================================== */
 
+@use '../design-system/colors' as *;
+@use '../design-system/spacing' as *;
+
 * {
   margin: 0;
   padding: 0;

@@ -2,6 +2,8 @@
    UTILIDADES DE FONDO
    =========================================== */
 
+@use '../design-system/colors' as *;
+
 // Fondos principales
 .bg-primary { background-color: $bg-primary; }
 .bg-secondary { background-color: $bg-secondary; }
