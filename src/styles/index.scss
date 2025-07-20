@@ -3,15 +3,15 @@
    =========================================== */
 
 // ========== DESIGN SYSTEM ==========
-@import 'design-system/colors';
-@import 'design-system/spacing';
+@use 'design-system/colors';
+@use 'design-system/spacing';
 
 // ========== BASE ==========
-@import 'base/fonts';
-@import 'base/reset';
+@use 'base/fonts';
+@use 'base/reset';
 
 // ========== UTILITIES ==========
-@import 'utilities/text';
-@import 'utilities/backgrounds';
-@import 'utilities/layout';
-@import 'utilities/borders-effects';
+@use 'utilities/text';
+@use 'utilities/backgrounds';
+@use 'utilities/layout';
+@use 'utilities/borders-effects';
