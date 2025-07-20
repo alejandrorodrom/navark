@@ -65,12 +65,12 @@
 .grid-rows-6 { grid-template-rows: repeat(6, minmax(0, 1fr)); }
 
 .gap-0 { gap: 0; }
-.gap-1 { gap: $spacing-xs; }
-.gap-2 { gap: $spacing-sm; }
-.gap-3 { gap: $spacing-md; }
-.gap-4 { gap: $spacing-lg; }
-.gap-5 { gap: $spacing-xl; }
-.gap-6 { gap: $spacing-2xl; }
+.gap-xs { gap: $spacing-xs; }
+.gap-sm { gap: $spacing-sm; }
+.gap-md { gap: $spacing-md; }
+.gap-lg { gap: $spacing-lg; }
+.gap-xl { gap: $spacing-xl; }
+.gap-2xl { gap: $spacing-2xl; }
 
 // Posicionamiento
 .static { position: static; }

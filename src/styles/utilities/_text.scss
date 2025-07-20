@@ -8,18 +8,17 @@
 .text-primary { color: $text-primary; }
 .text-secondary { color: $text-secondary; }
 .text-tertiary { color: $text-tertiary; }
-.text-disabled { color: $text-disabled; }
 .text-inverse { color: $text-inverse; }
 
 // Colores temáticos
-.text-blue { color: $primary-500; }
-.text-blue-light { color: $primary-400; }
-.text-blue-dark { color: $primary-600; }
-.text-accent { color: $accent-500; }
-.text-success { color: $success-500; }
-.text-error { color: $error-500; }
-.text-warning { color: $warning-500; }
-.text-info { color: $info-500; }
+.text-blue { color: $primary-md; }
+.text-blue-light { color: $primary-sm; }
+.text-blue-dark { color: $primary-lg; }
+.text-accent { color: $accent-md; }
+.text-success { color: $success-md; }
+.text-error { color: $error-md; }
+.text-warning { color: $warning-md; }
+.text-info { color: $info-md; }
 
 // Pesos de fuente
 .text-thin { font-weight: 100; }
