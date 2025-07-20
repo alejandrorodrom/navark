@@ -1,0 +1,50 @@
+/* ===========================================
+   UTILIDADES DE BORDES Y EFECTOS
+   =========================================== */
+
+// Bordes
+.border { border: 1px solid $border-primary; }
+.border-0 { border: 0; }
+.border-2 { border-width: 2px; }
+.border-4 { border-width: 4px; }
+.border-8 { border-width: 8px; }
+
+.border-primary { border-color: $border-primary; }
+.border-secondary { border-color: $border-secondary; }
+.border-focus { border-color: $border-focus; }
+.border-error { border-color: $border-error; }
+.border-success { border-color: $border-success; }
+
+// Border radius
+.rounded { border-radius: $radius; }
+.rounded-sm { border-radius: $radius-sm; }
+.rounded-md { border-radius: $radius-md; }
+.rounded-lg { border-radius: $radius-lg; }
+.rounded-xl { border-radius: $radius-xl; }
+.rounded-2xl { border-radius: $radius-2xl; }
+.rounded-3xl { border-radius: $radius-3xl; }
+.rounded-full { border-radius: $radius-full; }
+
+// Sombras
+.shadow-sm { box-shadow: $shadow-sm; }
+.shadow { box-shadow: $shadow; }
+.shadow-md { box-shadow: $shadow-md; }
+.shadow-lg { box-shadow: $shadow-lg; }
+.shadow-xl { box-shadow: $shadow-xl; }
+.shadow-2xl { box-shadow: $shadow-2xl; }
+.shadow-inner { box-shadow: $shadow-inner; }
+
+// Transiciones
+.transition { transition: $transition-normal; }
+.transition-fast { transition: $transition-fast; }
+.transition-slow { transition: $transition-slow; }
+.transition-bounce { transition: $transition-bounce; }
+
+// Cursor
+.cursor-pointer { cursor: pointer; }
+.cursor-default { cursor: default; }
+.cursor-not-allowed { cursor: not-allowed; }
+.cursor-wait { cursor: wait; }
+.cursor-move { cursor: move; }
+.cursor-zoom-in { cursor: zoom-in; }
+.cursor-zoom-out { cursor: zoom-out; } 

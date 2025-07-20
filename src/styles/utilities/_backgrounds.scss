@@ -1,0 +1,130 @@
+/* ===========================================
+   UTILIDADES DE FONDO
+   =========================================== */
+
+// Fondos principales
+.bg-primary { background-color: $bg-primary; }
+.bg-secondary { background-color: $bg-secondary; }
+.bg-tertiary { background-color: $bg-tertiary; }
+.bg-card { background-color: $bg-card; }
+.bg-modal { background-color: $bg-modal; }
+
+// Fondos temáticos
+.bg-blue { background-color: $primary-500; }
+.bg-blue-light { background-color: $primary-400; }
+.bg-blue-dark { background-color: $primary-600; }
+.bg-accent { background-color: $accent-500; }
+.bg-success { background-color: $success-500; }
+.bg-error { background-color: $error-500; }
+.bg-warning { background-color: $warning-500; }
+.bg-info { background-color: $info-500; }
+
+// Gradientes
+.bg-gradient-primary { background: $gradient-primary; }
+.bg-gradient-secondary { background: $gradient-secondary; }
+.bg-gradient-accent { background: $gradient-accent; }
+.bg-gradient-success { background: $gradient-success; }
+.bg-gradient-error { background: $gradient-error; }
+.bg-gradient-warning { background: $gradient-warning; }
+.bg-gradient-victory { background: $gradient-victory; }
+.bg-gradient-defeat { background: $gradient-defeat; }
+
+/* ===========================================
+   UTILIDADES DE JUEGO - ESTADOS DE PARTIDA
+   =========================================== */
+
+// Estados de partida (GameStatus del backend)
+.bg-game-waiting { background-color: $game-waiting; }      // waiting
+.bg-game-in-progress { background-color: $game-playing; }  // in_progress
+.bg-game-finished { background-color: $game-finished; }    // finished
+
+// Estados de jugador en la partida
+.bg-player-ready { background-color: $game-ready; }        // Jugador marcado como listo
+.bg-player-not-ready { background-color: $game-waiting; }  // Jugador no listo
+.bg-player-eliminated { background-color: $game-defeat; }  // Jugador eliminado
+.bg-player-winner { background-color: $game-victory; }     // Jugador ganador
+.bg-player-eliminated { background-color: $game-defeat; }  // Jugador eliminado
+
+// Estados de turno
+.bg-turn-active { background-color: $game-playing; }       // Turno activo
+.bg-turn-timeout { background-color: $game-paused; }       // Timeout de turno
+.bg-turn-inactive { background-color: $game-waiting; }     // No es el turno
+
+// Estados de conexión
+.bg-player-connected { background-color: $game-ready; }     // Jugador conectado
+.bg-player-disconnected { background-color: $game-waiting; } // Jugador desconectado
+.bg-player-abandoned { background-color: $game-defeat; }   // Jugador abandonado
+
+/* ===========================================
+   UTILIDADES DE JUEGO - TIPOS DE JUGADOR
+   =========================================== */
+
+// Tipos de jugador (según el backend)
+.bg-player-human { background-color: $player-human; }      // Jugador humano
+.bg-player-ai { background-color: $player-ai; }            // IA
+.bg-player-spectator { background-color: $player-guest; }  // Espectador
+.bg-player-creator { background-color: $player-premium; }  // Creador de la partida
+.bg-player-guest { background-color: $player-guest; }      // Invitado
+
+// Roles en la partida
+.bg-role-player { background-color: $player-human; }       // Rol: jugador
+.bg-role-spectator { background-color: $player-guest; }    // Rol: espectador
+.bg-role-creator { background-color: $player-premium; }    // Rol: creador
+
+/* ===========================================
+   UTILIDADES DE JUEGO - ESTADOS DE NAVES
+   =========================================== */
+
+// Estados de barcos (según el modelo del backend)
+.bg-ship-healthy { background-color: $ship-healthy; }      // Barco sano
+.bg-ship-damaged { background-color: $ship-damaged; }      // Barco dañado
+.bg-ship-critical { background-color: $ship-critical; }    // Barco crítico
+.bg-ship-destroyed { background-color: $ship-destroyed; }  // Barco hundido
+
+// Estados de disparo
+.bg-shot-hit { background-color: $success-500; }           // Disparo acertado
+.bg-shot-miss { background-color: $error-500; }            // Disparo fallado
+.bg-shot-sunk { background-color: $warning-500; }          // Barco hundido
+
+/* ===========================================
+   UTILIDADES DE JUEGO - DIFICULTAD
+   =========================================== */
+
+// Niveles de dificultad (según el backend: easy, medium, hard)
+.bg-difficulty-easy { background-color: $level-beginner; }     // easy
+.bg-difficulty-medium { background-color: $level-intermediate; } // medium
+.bg-difficulty-hard { background-color: $level-advanced; }     // hard
+
+/* ===========================================
+   UTILIDADES DE JUEGO - MODO DE JUEGO
+   =========================================== */
+
+// Modos de juego (según el backend: individual, teams)
+.bg-mode-individual { background-color: $primary-500; }    // individual
+.bg-mode-teams { background-color: $accent-500; }          // teams
+
+/* ===========================================
+   UTILIDADES DE JUEGO - TIPOS DE DISPARO
+   =========================================== */
+
+// Tipos de disparo (según el backend)
+.bg-shot-simple { background-color: $primary-500; }        // simple
+.bg-shot-cross { background-color: $accent-500; }          // cross
+.bg-shot-multi { background-color: $warning-500; }         // multi
+.bg-shot-area { background-color: $error-500; }            // area
+.bg-shot-scan { background-color: $info-500; }             // scan
+.bg-shot-nuclear { background-color: $level-master; }      // nuclear
+
+/* ===========================================
+   UTILIDADES DE JUEGO - ESTADOS DE SALA
+   =========================================== */
+
+// Estados de sala
+.bg-room-public { background-color: $success-500; }         // Sala pública
+.bg-room-private { background-color: $warning-500; }       // Sala privada
+.bg-room-matchmaking { background-color: $info-500; }      // Matchmaking
+
+// Estados de acceso
+.bg-access-allowed { background-color: $success-500; }     // Acceso permitido
+.bg-access-denied { background-color: $error-500; }        // Acceso denegado
+.bg-access-full { background-color: $warning-500; }        // Sala llena 

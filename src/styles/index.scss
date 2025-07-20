@@ -1,11 +1,17 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ===========================================
+   ESTILOS PRINCIPALES - NAVARK
+   =========================================== */
 
-body {
-  background-color: #0a0a0a;
-  color: white;
-  font-family: 'Inter', sans-serif;
-}
+// ========== DESIGN SYSTEM ==========
+@import 'design-system/colors';
+@import 'design-system/spacing';
+
+// ========== BASE ==========
+@import 'base/fonts';
+@import 'base/reset';
+
+// ========== UTILITIES ==========
+@import 'utilities/text';
+@import 'utilities/backgrounds';
+@import 'utilities/layout';
+@import 'utilities/borders-effects';
