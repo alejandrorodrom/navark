@@ -168,9 +168,35 @@ function FloatingLogo() {
   )
 }
 
+function SpinningRudder() {
+  const rudderGroupRef = useRef<THREE.Group>(null)
+  const rudderObjectRef = useRef<THREE.Object3D>(null)
+  const rudderGltf = useGLTF('/models/rudder.glb')
+  const rudder = rudderGltf.scene
+
+  useEffect(() => {
+    let frameId: number
+    const animate = () => {
+      if (rudderObjectRef.current) {
+        rudderObjectRef.current.rotation.x -= 0.07 // giro hacia la derecha
+      }
+      frameId = requestAnimationFrame(animate)
+    }
+    animate()
+    return () => cancelAnimationFrame(frameId)
+  }, [])
+
+  return (
+    <group ref={rudderGroupRef} position={[0, -1.5, 0]} scale={[0.3, 0.3, 0.3]} rotation={[-0.40, -Math.PI / 2, 0]}>
+      <primitive object={rudder.clone()} ref={rudderObjectRef} />
+    </group>
+  )
+}
+
 useGLTF.preload('/models/loading-ship-1.glb')
 useGLTF.preload('/models/loading-ship-2.glb')
 useGLTF.preload('/models/cannonball.glb')
+useGLTF.preload('/models/rudder.glb')
 
 export default function SplashScene() {
   return (
@@ -178,6 +204,7 @@ export default function SplashScene() {
       <ambientLight intensity={1.2}/>
       <directionalLight position={[-2, 4, 2]} intensity={1.8}/>
       <FloatingLogo/>
+      <SpinningRudder/>
     </Canvas>
   )
 }

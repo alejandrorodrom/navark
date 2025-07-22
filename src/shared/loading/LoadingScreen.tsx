@@ -7,9 +7,6 @@ export default function LoadingScreen() {
       <div className="splash-canvas">
         <SplashScene/>
       </div>
-      <div className="loading-spinner">
-        <div className="spinner"></div>
-      </div>
     </div>
   )
 }
