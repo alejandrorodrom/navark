@@ -1,7 +1,92 @@
 import { useRef, useEffect, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import { MeshPhysicalMaterial } from 'three'
+
+// Charco animado con olas debajo de cada barco
+function AnimatedPuddle({ position }: { position: [number, number, number] }) {
+  const meshRef = useRef<THREE.Mesh>(null)
+  const [geometry] = useState(() => {
+    const radius = 0.6;
+    const segments = 128;
+    const geo = new THREE.CircleGeometry(radius, segments);
+    const pos = geo.attributes.position;
+    // Solo modificar los vértices del borde (índices 1 a N)
+    const borderCount = pos.count - 1;
+    const randoms = Array.from({ length: borderCount }, () => (Math.random() - 0.5) * 0.06);
+    // Calcular y guardar la posición del primer vértice del borde
+    const angle0 = 0;
+    const variation0 = 1
+      + Math.sin(angle0 * 2) * 0.18
+      + Math.cos(angle0 * 3) * 0.13
+      + Math.sin(angle0 * 1) * 0.09;
+    const x0 = pos.getX(1) * variation0;
+    const y0 = pos.getY(1) * variation0;
+    pos.setX(1, x0);
+    pos.setY(1, y0);
+    // Aplicar variación al resto del borde
+    for (let i = 2; i < pos.count - 1; i++) {
+      const angle = ((i - 1) / (borderCount - 1)) * Math.PI * 2;
+      const variation = 1
+        + Math.sin(angle * 2) * 0.18
+        + Math.cos(angle * 3) * 0.13
+        + Math.sin(angle * 1) * 0.09;
+      pos.setX(i, pos.getX(i) * variation);
+      pos.setY(i, pos.getY(i) * variation);
+    }
+    // Copiar la posición del primer vértice del borde al último
+    pos.setX(pos.count - 1, x0);
+    pos.setY(pos.count - 1, y0);
+    return geo;
+  })
+  const baseZ = useRef<Float32Array>(null)
+  const scaleZ = 2.2 // Escalado en Z para el elipse
+
+  useEffect(() => {
+    baseZ.current = new Float32Array(geometry.attributes.position.count)
+    for (let i = 0; i < geometry.attributes.position.count; i++) {
+      baseZ.current[i] = geometry.attributes.position.getZ(i)
+    }
+  }, [geometry])
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime()
+    const pos = geometry.attributes.position
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i)
+      const y = pos.getY(i)
+      // Distancia elíptica considerando el escalado en Z
+      const d = Math.sqrt(x * x + (y / scaleZ) * (y / scaleZ))
+      const wave = Math.sin(8 * d - t * 3) * 0.04
+      pos.setZ(i, baseZ.current ? baseZ.current[i] + wave : wave)
+    }
+    pos.needsUpdate = true
+    geometry.computeVertexNormals()
+  })
+
+  return (
+    <>
+      <mesh ref={meshRef} geometry={geometry} position={position} rotation={[-Math.PI / 2, 0, 0]} scale={[1.3, 3, scaleZ]}
+        >
+        <meshPhysicalMaterial
+          color="#7ed6fb"
+          roughness={0.35}
+          metalness={0.0}
+          transmission={0.7}
+          thickness={0.2}
+          ior={1.2}
+          transparent
+          opacity={0.85}
+        />
+      </mesh>
+      {/* Highlight cartoon */}
+      <mesh geometry={geometry} position={[position[0], position[1]+0.01, position[2]]} rotation={[-Math.PI / 2, 0, 0]} scale={[0.5, 1.2, scaleZ * 0.7]}>
+        <meshPhysicalMaterial color="#fff" transparent opacity={0.25} roughness={0.2} metalness={0.0} />
+      </mesh>
+    </>
+  )
+}
 
 function FloatingLogo() {
   const groupRef = useRef<THREE.Group>(null)
@@ -141,7 +226,10 @@ function FloatingLogo() {
   }, [isShooting, currentShooter])
 
   return (
-    <group ref={groupRef} scale={0.5}>
+    <group ref={groupRef} scale={0.5} position={[0, 0.7, 0]}>
+      {/* Charco animado debajo de cada barco */}
+      <AnimatedPuddle position={[-1.5, -0.7, 0]} />
+      <AnimatedPuddle position={[1.5, -0.7, 0]} />
       {/* Barco 1 - Izquierda */}
       <group ref={ship1Ref} position={[-1.5, 0, 0]} rotation={[0, Math.PI / 2.5, 0]}>
         <primitive object={ship1.clone()} />
@@ -168,7 +256,7 @@ function FloatingLogo() {
   )
 }
 
-function SpinningRudder() {
+function SpinningRudder({ position = [0, -1.5, 0] }: { position?: [number, number, number] }) {
   const rudderGroupRef = useRef<THREE.Group>(null)
   const rudderObjectRef = useRef<THREE.Object3D>(null)
   const rudderGltf = useGLTF('/models/rudder.glb')
@@ -187,7 +275,7 @@ function SpinningRudder() {
   }, [])
 
   return (
-    <group ref={rudderGroupRef} position={[0, -1.5, 0]} scale={[0.3, 0.3, 0.3]} rotation={[-0.40, -Math.PI / 2, 0]}>
+    <group ref={rudderGroupRef} position={position} scale={[0.3, 0.3, 0.3]} rotation={[-0.40, -Math.PI / 2, 0]}>
       <primitive object={rudder.clone()} ref={rudderObjectRef} />
     </group>
   )
@@ -201,10 +289,13 @@ useGLTF.preload('/models/rudder.glb')
 export default function SplashScene() {
   return (
     <Canvas camera={{ position: [0, 1.5, 4], fov: 50 }} style={{ background: 'white' }}>
-      <ambientLight intensity={1.2}/>
-      <directionalLight position={[-2, 4, 2]} intensity={1.8}/>
+      <ambientLight intensity={1.6}/>
+      <directionalLight
+        position={[0, 2, 4]}
+        intensity={1.0}
+      />
       <FloatingLogo/>
-      <SpinningRudder/>
+      <SpinningRudder position={[0, -1.8, 0]} />
     </Canvas>
   )
 }
