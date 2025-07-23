@@ -2,7 +2,6 @@ import { useRef, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
-import { MeshPhysicalMaterial } from 'three'
 
 // Charco animado con olas debajo de cada barco
 function AnimatedPuddle({ position }: { position: [number, number, number] }) {
@@ -14,7 +13,6 @@ function AnimatedPuddle({ position }: { position: [number, number, number] }) {
     const pos = geo.attributes.position;
     // Solo modificar los vértices del borde (índices 1 a N)
     const borderCount = pos.count - 1;
-    const randoms = Array.from({ length: borderCount }, () => (Math.random() - 0.5) * 0.06);
     // Calcular y guardar la posición del primer vértice del borde
     const angle0 = 0;
     const variation0 = 1
@@ -99,6 +97,9 @@ function FloatingLogo() {
   // Usar refs para el temblor
   const shakeUntil1 = useRef(0)
   const shakeUntil2 = useRef(0)
+  const [explosions, setExplosions] = useState<{ position: [number, number, number], key: number, created: number }[]>([])
+  const explosionKey = useRef(0)
+  const explosionTriggered = useRef(false)
 
   // Cargar modelos de barcos distintos
   const ship1Gltf = useGLTF('/models/loading_ship_1.glb')
@@ -107,6 +108,8 @@ function FloatingLogo() {
   const ship2 = ship2Gltf.scene
   const cannonballGltf = useGLTF('/models/cannonball.glb')
   const cannonball = cannonballGltf.scene
+  const explosionGltf = useGLTF('/models/explosion.glb')
+  const explosion = explosionGltf.scene
 
   // Animación continua de barcos y bala
   useEffect(() => {
@@ -171,6 +174,19 @@ function FloatingLogo() {
       setShotData(prev => {
         if (!prev) return prev
         const newProgress = prev.progress + 0.015
+        // Duración total de la bala (en segundos): 1 / 0.015 ≈ 66 frames ≈ 1s
+        // 300 ms antes: progreso >= 1 - 0.3 / 1 = 0.7
+        if (!explosionTriggered.current && newProgress >= 0.8) {
+          setExplosions((exps) => [
+            ...exps,
+            {
+              position: [prev.to, prev.toY + 0.48, prev.toZ],
+              key: explosionKey.current++,
+              created: Date.now()
+            }
+          ])
+          explosionTriggered.current = true
+        }
         if (newProgress >= 1) {
           setIsShooting(false)
           // Temblor al barco objetivo usando refs
@@ -179,6 +195,7 @@ function FloatingLogo() {
           } else {
             shakeUntil2.current = elapsed + 0.5
           }
+          explosionTriggered.current = false
           return null
         }
         return {...prev, progress: newProgress}
@@ -195,6 +212,16 @@ function FloatingLogo() {
       }
     }
   }, [])
+
+  // Limpiar explosiones después de su animación
+  useEffect(() => {
+    if (explosions.length === 0) return
+    const interval = setInterval(() => {
+      const now = Date.now()
+      setExplosions((exps) => exps.filter(e => now - e.created < 1000))
+    }, 100)
+    return () => clearInterval(interval)
+  }, [explosions])
 
   // Disparo alternado cada 1.5 segundos, independiente de la animación
   useEffect(() => {
@@ -230,6 +257,7 @@ function FloatingLogo() {
       {/* Charco animado debajo de cada barco */}
       <AnimatedPuddle position={[-1.5, -0.7, 0]} />
       <AnimatedPuddle position={[1.5, -0.7, 0]} />
+      {/* Modelo de explosión en el centro para prueba */}
       {/* Barco 1 - Izquierda */}
       <group ref={ship1Ref} position={[-1.5, 0, 0]} rotation={[0, Math.PI / 2.5, 0]}>
         <primitive object={ship1.clone()} />
@@ -252,6 +280,10 @@ function FloatingLogo() {
           <primitive object={cannonball.clone()} />
         </group>
       )}
+      {/* Explosiones cartoon en impactos */}
+      {explosions.map((exp) => (
+        <ExplosionAnimated key={exp.key} object={explosion} position={exp.position} />
+      ))}
     </group>
   )
 }
@@ -275,8 +307,92 @@ function SpinningRudder({ position = [0, -1.5, 0] }: { position?: [number, numbe
   }, [])
 
   return (
-    <group ref={rudderGroupRef} position={position} scale={[0.3, 0.3, 0.3]} rotation={[-0.40, -Math.PI / 2, 0]}>
+    <group ref={rudderGroupRef} position={position} scale={[0.22, 0.22, 0.22]} rotation={[-0.40, -Math.PI / 2, 0]}>
       <primitive object={rudder.clone()} ref={rudderObjectRef} />
+    </group>
+  )
+}
+
+function ExplosionAnimated({ object, position = [0, 0, 0] }: { object: THREE.Object3D, position?: [number, number, number] }) {
+  const groupRef = useRef<THREE.Group>(null)
+  const [progress, setProgress] = useState(0)
+  const [showSmoke, setShowSmoke] = useState(false)
+  const [explosionObj] = useState(() => object.clone())
+  const progressRef = useRef(0)
+
+  useFrame((_, delta) => {
+    setProgress((prev) => {
+      const next = Math.min(prev + delta / 0.8, 1)
+      progressRef.current = next
+      if (next === 1 && !showSmoke) setShowSmoke(true)
+      return next
+    })
+    // Desvanecer materiales usando el valor actualizado
+    const p = progressRef.current
+    const opacity = p < 0.7 ? 1 : 1 - (p - 0.7) / 0.3
+    explosionObj.traverse((child: any) => {
+      if (child.material) {
+        if (Array.isArray(child.material)) {
+          child.material.forEach((mat: any) => {
+            mat.transparent = true
+            mat.opacity = opacity
+            mat.needsUpdate = true
+          })
+        } else {
+          child.material.transparent = true
+          child.material.opacity = opacity
+          child.material.needsUpdate = true
+        }
+      }
+    })
+  })
+
+
+  const scale = 0.01 + progress * 0.85
+
+  return (
+    <group ref={groupRef} position={position}>
+      <group scale={[scale, scale, scale]}>
+        <primitive object={explosionObj} />
+      </group>
+      {showSmoke && <SmokeParticles />}
+    </group>
+  )
+}
+
+// Sistema simple de partículas de humo cartoon
+function SmokeParticles() {
+  // Definir posiciones y direcciones fijas para 8 partículas
+  const particles = [
+    { pos: [0, 0, 0], dir: [0, 1, 0] },
+    { pos: [0.1, 0, 0], dir: [0.5, 1, 0] },
+    { pos: [-0.1, 0, 0], dir: [-0.5, 1, 0] },
+    { pos: [0, 0, 0.1], dir: [0, 1, 0.5] },
+    { pos: [0, 0, -0.1], dir: [0, 1, -0.5] },
+    { pos: [0.08, 0, 0.08], dir: [0.4, 1, 0.4] },
+    { pos: [-0.08, 0, -0.08], dir: [-0.4, 1, -0.4] },
+    { pos: [0, 0, 0], dir: [0, 1.2, 0] },
+  ]
+  const [life, setLife] = useState(0)
+  useFrame((_, delta) => {
+    setLife((prev) => Math.min(prev + delta * 1.2, 1))
+  })
+  return (
+    <group>
+      {particles.map((p, i) => {
+        // Movimiento y desvanecimiento
+        const px = p.pos[0] + p.dir[0] * life * 0.7
+        const py = p.pos[1] + p.dir[1] * life * 0.7
+        const pz = p.pos[2] + p.dir[2] * life * 0.7
+        const scale = 0.035 + 0.05 * (1 - life)
+        const opacity = 0.45 * (1 - life)
+        return (
+          <mesh key={i} position={[px, py, pz]} scale={[scale, scale, scale]}>
+            <sphereGeometry args={[1, 16, 16]} />
+            <meshStandardMaterial color="#b0b0b0" transparent opacity={opacity} roughness={1} />
+          </mesh>
+        )
+      })}
     </group>
   )
 }
@@ -285,6 +401,7 @@ useGLTF.preload('/models/loading-ship-1.glb')
 useGLTF.preload('/models/loading-ship-2.glb')
 useGLTF.preload('/models/cannonball.glb')
 useGLTF.preload('/models/rudder.glb')
+useGLTF.preload('/models/explosion.glb')
 
 export default function SplashScene() {
   return (
