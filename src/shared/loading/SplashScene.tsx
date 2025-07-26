@@ -22,14 +22,16 @@ function FloatingLogo() {
   const explosionTriggered = useRef(false)
 
   // Cargar modelos de barcos distintos
-  const ship1Gltf = useGLTF('/models/loading_ship_1.glb')
-  const ship2Gltf = useGLTF('/models/loading_ship_2.glb')
+  const ship1Gltf = useGLTF('/models/ship_1.glb')
+  const ship2Gltf = useGLTF('/models/ship_2.glb')
   const ship1 = ship1Gltf.scene
   const ship2 = ship2Gltf.scene
   const cannonballGltf = useGLTF('/models/cannonball.glb')
   const cannonball = cannonballGltf.scene
   const explosionGltf = useGLTF('/models/explosion.glb')
   const explosion = explosionGltf.scene
+  const islandGltf = useGLTF('/models/island.glb')
+  const island = islandGltf.scene
 
   // Animación continua de barcos y bala
   useEffect(() => {
@@ -174,17 +176,24 @@ function FloatingLogo() {
   }, [isShooting, currentShooter])
 
   return (
-    <group ref={groupRef} scale={0.5} position={[0, 0.7, 0]}>
-      {/* Charco animado debajo de cada barco */}
-      <AnimatedPuddle position={[-1.5, -0.7, 0]} />
-      <AnimatedPuddle position={[1.5, -0.7, 0]} />
+    <group ref={groupRef} scale={0.5} position={[0, 1.2, 2.5]}>
+      {/* Océano que ocupa todo el espacio disponible */}
+      <AnimatedPuddle position={[0, -0.6, 0]} scale={[20, 10, 2.2]} />
       {/* Barco 1 - Izquierda */}
-      <group ref={ship1Ref} position={[-1.5, 0, 0]} rotation={[0, Math.PI / 2.5, 0]}>
+      <group ref={ship1Ref} position={[-1.5, -0.8, 0]} rotation={[0, Math.PI / 2.5, 0]}>
         <primitive object={ship1.clone()} />
       </group>
+      {/* Isla 1 - Lado izquierdo del barco 1 */}
+      <group position={[5, 0.38, 0]} rotation={[0, Math.PI / 6, 0]}>
+        <primitive object={island.clone()} />
+      </group>
       {/* Barco 2 - Derecha */}
-      <group ref={ship2Ref} position={[1.5, 0, 0]} rotation={[0, -Math.PI / 2.5, 0]}>
+      <group ref={ship2Ref} position={[1.5, -0.8, 0]} rotation={[0, -Math.PI / 2.5, 0]}>
         <primitive object={ship2.clone()} />
+      </group>
+      {/* Isla 2 - Lado derecho del barco 2 */}
+      <group position={[-5, 0.38, 0]} rotation={[0, -Math.PI / 6, 0]}>
+        <primitive object={island.clone()} />
       </group>
       {/* Disparo actual */}
       {shotData && (
@@ -208,22 +217,22 @@ function FloatingLogo() {
   )
 }
 
-useGLTF.preload('/models/loading-ship-1.glb')
-useGLTF.preload('/models/loading-ship-2.glb')
+useGLTF.preload('/models/ship-1.glb')
+useGLTF.preload('/models/ship-2.glb')
 useGLTF.preload('/models/cannonball.glb')
 useGLTF.preload('/models/rudder.glb')
 useGLTF.preload('/models/explosion.glb')
+useGLTF.preload('/models/island.glb')
 
 export default function SplashScene() {
   return (
-    <Canvas camera={{ position: [0, 1.5, 4], fov: 50 }} style={{ background: 'white' }}>
-      <ambientLight intensity={1.6}/>
+    <Canvas camera={{ position: [0, 1.5, 6], fov: 50 }} style={{ background: 'white' }}>
+      <ambientLight intensity={1.2}/>
       <directionalLight
         position={[0, 2, 4]}
-        intensity={1.0}
+        intensity={0.8}
       />
       <FloatingLogo/>
-      <SpinningRudder position={[0, -1.8, 0]} />
     </Canvas>
   )
 }
