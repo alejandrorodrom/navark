@@ -5,6 +5,7 @@ import * as THREE from 'three'
 import AnimatedPuddle from './components/AnimatedPuddle'
 import ExplosionAnimated from './components/ExplosionAnimated'
 import SpinningRudder from './components/SpinningRudder'
+import { useFrame } from '@react-three/fiber'
 
 function FloatingLogo() {
   const groupRef = useRef<THREE.Group>(null)
@@ -224,14 +225,112 @@ useGLTF.preload('/models/rudder.glb')
 useGLTF.preload('/models/explosion.glb')
 useGLTF.preload('/models/island.glb')
 
+function Clouds() {
+  const cloud1Ref = useRef<THREE.Group | null>(null)
+  const cloud2Ref = useRef<THREE.Group | null>(null)
+  const cloud3Ref = useRef<THREE.Group | null>(null)
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime()
+    if (cloud1Ref.current && cloud1Ref.current.position) {
+      cloud1Ref.current.position.x = Math.sin(t * 0.07) * 0.2
+      cloud1Ref.current.position.y = 1.7 + Math.cos(t * 0.07) * 0.08
+    }
+    if (cloud2Ref.current && cloud2Ref.current.position) {
+      cloud2Ref.current.position.x = -1 + Math.sin(t * 0.07 + 1.5) * 0.18
+      cloud2Ref.current.position.y = 1.8 + Math.cos(t * 0.07 + 1.5) * 0.07
+    }
+    if (cloud3Ref.current && cloud3Ref.current.position) {
+      cloud3Ref.current.position.x = 1 + Math.sin(t * 0.07 + 3) * 0.18
+      cloud3Ref.current.position.y = 1.8 + Math.cos(t * 0.07 + 3) * 0.07
+    }
+  })
+
+  return (
+    <>
+      {/* Nube real con múltiples esferas */}
+      <group ref={cloud1Ref} position={[0, 1.7, 4]}>
+        <mesh position={[0, 0, 0]} scale={[0.2, 0.13, 0.2]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.15} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.2} />
+        </mesh>
+        <mesh position={[0.13, 0.07, 0]} scale={[0.17, 0.1, 0.17]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+        <mesh position={[-0.1, 0.03, 0]} scale={[0.13, 0.08, 0.13]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+        <mesh position={[0.2, -0.03, 0]} scale={[0.12, 0.07, 0.14]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+        <mesh position={[-0.17, -0.07, 0]} scale={[0.1, 0.05, 0.12]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+      </group>
+      {/* Segunda nube */}
+      <group ref={cloud2Ref} position={[-1, 1.8, 4.1]}>
+        <mesh position={[0, 0, 0]} scale={[0.17, 0.1, 0.17]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.15} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.2} />
+        </mesh>
+        <mesh position={[0.1, 0.05, 0]} scale={[0.13, 0.08, 0.13]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+        <mesh position={[-0.08, 0.03, 0]} scale={[0.12, 0.07, 0.12]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+        <mesh position={[0.17, -0.03, 0]} scale={[0.1, 0.05, 0.1]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+      </group>
+      {/* Tercera nube */}
+      <group ref={cloud3Ref} position={[1, 1.8, 4.1]}>
+        <mesh position={[0, 0, 0]} scale={[0.23, 0.13, 0.23]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.15} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.2} />
+        </mesh>
+        <mesh position={[0.17, 0.08, 0]} scale={[0.18, 0.11, 0.18]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+        <mesh position={[-0.12, 0.04, 0]} scale={[0.15, 0.09, 0.15]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+        <mesh position={[0.23, -0.04, 0]} scale={[0.13, 0.07, 0.13]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+        <mesh position={[-0.2, -0.08, 0]} scale={[0.12, 0.06, 0.12]}>
+          <sphereGeometry args={[1, 16, 16]} />
+          <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
+        </mesh>
+      </group>
+    </>
+  )
+}
+
 export default function SplashScene() {
   return (
     <Canvas camera={{ position: [0, 1.5, 6], fov: 50 }} style={{ background: 'white' }}>
-      <ambientLight intensity={1.2}/>
+      <ambientLight intensity={2}/>
       <directionalLight
         position={[0, 2, 4]}
-        intensity={0.8}
+        intensity={1.5}
       />
+      {/* Cielo */}
+      <mesh position={[0, 5, 0]} scale={[15, 8, 15]}>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshBasicMaterial color="#ADD8E6" side={2} />
+      </mesh>
+      <Clouds />
       <FloatingLogo/>
     </Canvas>
   )
