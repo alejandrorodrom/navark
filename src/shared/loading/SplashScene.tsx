@@ -184,7 +184,7 @@ function FloatingLogo() {
         <primitive object={ship1.clone()} />
       </group>
       {/* Isla 1 - Lado izquierdo del barco 1 */}
-      <group position={[5, 0.38, 0]} rotation={[0, Math.PI / 6, 0]}>
+      <group position={[-4, 0.38, 0]} rotation={[0, Math.PI / 6, 0]}>
         <primitive object={island.clone()} />
       </group>
       {/* Barco 2 - Derecha */}
@@ -192,7 +192,7 @@ function FloatingLogo() {
         <primitive object={ship2.clone()} />
       </group>
       {/* Isla 2 - Lado derecho del barco 2 */}
-      <group position={[-5, 0.38, 0]} rotation={[0, -Math.PI / 6, 0]}>
+      <group position={[4, 0.38, 0]} rotation={[0, -Math.PI / 6, 0]}>
         <primitive object={island.clone()} />
       </group>
       {/* Disparo actual */}
@@ -217,8 +217,8 @@ function FloatingLogo() {
   )
 }
 
-useGLTF.preload('/models/ship-1.glb')
-useGLTF.preload('/models/ship-2.glb')
+useGLTF.preload('/models/ship_1.glb')
+useGLTF.preload('/models/ship_2.glb')
 useGLTF.preload('/models/cannonball.glb')
 useGLTF.preload('/models/rudder.glb')
 useGLTF.preload('/models/explosion.glb')
@@ -232,82 +232,85 @@ function Clouds() {
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime()
     if (cloud1Ref.current && cloud1Ref.current.position) {
-      cloud1Ref.current.position.x = Math.sin(t * 0.07) * 0.2
-      cloud1Ref.current.position.y = 1.7 + Math.cos(t * 0.07) * 0.08
+      cloud1Ref.current.position.x = Math.sin(t * 0.07) * 0.12
+      cloud1Ref.current.position.y = 1.7 + Math.cos(t * 0.07) * 0.05
+      cloud1Ref.current.position.z = 4.5
     }
     if (cloud2Ref.current && cloud2Ref.current.position) {
-      cloud2Ref.current.position.x = -1 + Math.sin(t * 0.07 + 1.5) * 0.18
-      cloud2Ref.current.position.y = 1.8 + Math.cos(t * 0.07 + 1.5) * 0.07
+      cloud2Ref.current.position.x = -0.7 + Math.sin(t * 0.07 + 1.5) * 0.09
+      cloud2Ref.current.position.y = 1.7 + Math.cos(t * 0.07 + 1.5) * 0.04
+      cloud2Ref.current.position.z = 4.5
     }
     if (cloud3Ref.current && cloud3Ref.current.position) {
-      cloud3Ref.current.position.x = 1 + Math.sin(t * 0.07 + 3) * 0.18
-      cloud3Ref.current.position.y = 1.8 + Math.cos(t * 0.07 + 3) * 0.07
+      cloud3Ref.current.position.x = 0.7 + Math.sin(t * 0.07 + 3) * 0.09
+      cloud3Ref.current.position.y = 1.7 + Math.cos(t * 0.07 + 3) * 0.04
+      cloud3Ref.current.position.z = 4.5
     }
   })
 
   return (
     <>
       {/* Nube real con múltiples esferas */}
-      <group ref={cloud1Ref} position={[0, 1.7, 4]}>
-        <mesh position={[0, 0, 0]} scale={[0.2, 0.13, 0.2]}>
+      <group ref={cloud1Ref} position={[0, 1.7, 4.5]}>
+        <mesh position={[0, 0, 0]} scale={[0.137, 0.091, 0.137]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.15} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.2} />
         </mesh>
-        <mesh position={[0.13, 0.07, 0]} scale={[0.17, 0.1, 0.17]}>
+        <mesh position={[0.07, 0.035, 0]} scale={[0.116, 0.069, 0.116]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
-        <mesh position={[-0.1, 0.03, 0]} scale={[0.13, 0.08, 0.13]}>
+        <mesh position={[-0.05, 0.015, 0]} scale={[0.088, 0.055, 0.088]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
-        <mesh position={[0.2, -0.03, 0]} scale={[0.12, 0.07, 0.14]}>
+        <mesh position={[0.1, -0.015, 0]} scale={[0.082, 0.047, 0.095]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
-        <mesh position={[-0.17, -0.07, 0]} scale={[0.1, 0.05, 0.12]}>
+        <mesh position={[-0.08, -0.035, 0]} scale={[0.069, 0.034, 0.082]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
       </group>
       {/* Segunda nube */}
-      <group ref={cloud2Ref} position={[-1, 1.8, 4.1]}>
-        <mesh position={[0, 0, 0]} scale={[0.17, 0.1, 0.17]}>
+      <group ref={cloud2Ref} position={[-0.7, 1.7, 4.5]}>
+        <mesh position={[0, 0, 0]} scale={[0.116, 0.069, 0.116]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.15} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.2} />
         </mesh>
-        <mesh position={[0.1, 0.05, 0]} scale={[0.13, 0.08, 0.13]}>
+        <mesh position={[0.05, 0.025, 0]} scale={[0.088, 0.055, 0.088]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
-        <mesh position={[-0.08, 0.03, 0]} scale={[0.12, 0.07, 0.12]}>
+        <mesh position={[-0.04, 0.015, 0]} scale={[0.082, 0.047, 0.082]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
-        <mesh position={[0.17, -0.03, 0]} scale={[0.1, 0.05, 0.1]}>
+        <mesh position={[0.08, -0.015, 0]} scale={[0.069, 0.034, 0.069]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
       </group>
       {/* Tercera nube */}
-      <group ref={cloud3Ref} position={[1, 1.8, 4.1]}>
-        <mesh position={[0, 0, 0]} scale={[0.23, 0.13, 0.23]}>
+      <group ref={cloud3Ref} position={[0.7, 1.7, 4.5]}>
+        <mesh position={[0, 0, 0]} scale={[0.156, 0.088, 0.156]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.15} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.2} />
         </mesh>
-        <mesh position={[0.17, 0.08, 0]} scale={[0.18, 0.11, 0.18]}>
+        <mesh position={[0.09, 0.04, 0]} scale={[0.122, 0.074, 0.122]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
-        <mesh position={[-0.12, 0.04, 0]} scale={[0.15, 0.09, 0.15]}>
+        <mesh position={[-0.06, 0.02, 0]} scale={[0.101, 0.061, 0.101]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
-        <mesh position={[0.23, -0.04, 0]} scale={[0.13, 0.07, 0.13]}>
+        <mesh position={[0.12, -0.02, 0]} scale={[0.088, 0.047, 0.088]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
-        <mesh position={[-0.2, -0.08, 0]} scale={[0.12, 0.06, 0.12]}>
+        <mesh position={[-0.1, -0.04, 0]} scale={[0.082, 0.042, 0.082]}>
           <sphereGeometry args={[1, 16, 16]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.18} metalness={0} emissive="#FFFFFF" emissiveIntensity={0.15} />
         </mesh>
