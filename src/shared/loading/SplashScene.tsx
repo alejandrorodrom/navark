@@ -4,7 +4,6 @@ import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import AnimatedPuddle from './components/AnimatedPuddle'
 import ExplosionAnimated from './components/ExplosionAnimated'
-import SpinningRudder from './components/SpinningRudder'
 import { useFrame } from '@react-three/fiber'
 
 function FloatingLogo() {
